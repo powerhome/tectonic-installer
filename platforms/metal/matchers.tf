@@ -123,5 +123,9 @@ resource "matchbox_group" "worker" {
     ign_kubelet_service_json               = "${jsonencode(module.ignition_workers.kubelet_service_rendered)}"
     ign_max_user_watches_json              = "${jsonencode(module.ignition_workers.max_user_watches_rendered)}"
     ign_update_ca_certificates_dropin_json = "${jsonencode(module.ignition_workers.update_ca_certificates_dropin_rendered)}"
+
+    ign_use_nic_bonding         = "${element(var.tectonic_metal_workers_nic_bonding, count.index)}"
+    ign_nic_bonding_mac_address = "${element(var.tectonic_metal_worker_macs, count.index)}"
+    ign_nic_bonding_matcher     = "${element(var.tectonic_metal_worker_nic_bonding_matcher, count.index)}"
   }
 }

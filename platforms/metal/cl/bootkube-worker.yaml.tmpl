@@ -1,4 +1,32 @@
 ---
+{{ if eq .ign_nic_use_bonding "true" }}
+networkd:
+  units:
+   - name: 10-int.network
+     contents: |
+       [Match]
+       Name={{ .ign_nic_bonding_matcher }}
+       [Network]
+       Bond=bond0
+       LinkLocalAddressing=no
+       IPv6AcceptRA=no
+   - name: 20-bond0.netdev
+     contents: |
+       [NetDev]
+       Name=bond0
+       Kind=bond
+       MACAddress={{.ign_nic_bonding_mac_address}}
+       [Bond]
+       Mode=balance-rr
+       MIIMonitorSec=1
+   - name: 30-bond0.network
+     contents: |
+       [Match]
+       Name=bond0
+       [Network]
+       DHCP=true
+
+{{ end }}
 systemd:
   units:
     - name: docker.service
@@ -51,6 +79,14 @@ storage:
       contents:
         inline:
           {{.domain_name}}
+{{ if eq .ign_nic_use_bonding "true" }}
+    - path: /etc/modprobe.d/bonding.conf
+      filesystem: root
+      mode: 0644
+      contents:
+        inline: |
+          options bonding max_bonds=0
+{{ end }}
     - path: /etc/sysctl.d/max-user-watches.conf
       filesystem: root
       mode: 0644
