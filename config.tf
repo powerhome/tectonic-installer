@@ -502,3 +502,24 @@ variable "tectonic_custom_ca_pem_list" {
 (optional) A list of PEM encoded CA files that will be installed in /etc/ssl/certs on etcd, master, and worker nodes.
 EOF
 }
+
+variable "tectonic_metal_workers_nic_bonding" {
+  type    = "list"
+  default = []
+
+  description = <<EOF
+If you are running on bare metal and want to bond the NICs of your workers, override this
+in your terraform.tfvars file to be a list of boolean values, which lets you enable NIC
+bonding on a worker by worker basis.
+EOF
+}
+
+variable "tectonic_metal_worker_nic_bonding_matcher" {
+  type    = "list"
+  default = []
+
+  description = <<EOF
+If you are enabling NIC bonding, you must provide a matcher string for each worker
+node to determine which physical interfaces are bonded (i.e., en*, eth*).
+EOF
+}
