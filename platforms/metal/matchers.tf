@@ -124,7 +124,7 @@ resource "matchbox_group" "worker" {
     ign_max_user_watches_json              = "${jsonencode(module.ignition_workers.max_user_watches_rendered)}"
     ign_update_ca_certificates_dropin_json = "${jsonencode(module.ignition_workers.update_ca_certificates_dropin_rendered)}"
 
-    ign_use_nic_bonding         = "${length(var.tectonic_metal_workers_nic_bonding) > 0 ? element(concat(var.tectonic_metal_workers_nic_bonding, list("")), count.index) : "false"}"
+    ign_nic_use_bonding         = "${length(var.tectonic_metal_workers_nic_bonding) > 0 ? element(concat(var.tectonic_metal_workers_nic_bonding, list("")), count.index) : "false"}"
     ign_nic_bonding_matcher     = "${length(var.tectonic_metal_worker_nic_bonding_matcher) > 0 ? element(concat(var.tectonic_metal_workers_nic_bonding, list("")), count.index) : ""}"
     ign_nic_bonding_mac_address = "${element(var.tectonic_metal_worker_macs, count.index)}"
   }
